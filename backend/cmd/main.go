@@ -6,6 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/AntonZatsepilin/music-library.git/internal/handler"
+	"github.com/AntonZatsepilin/music-library.git/internal/repository"
+	"github.com/AntonZatsepilin/music-library.git/internal/service"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"

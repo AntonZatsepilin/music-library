@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/AntonZatsepilin/music-library.git/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,13 +18,12 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
-	api := router.Group("/songs")
+	api := router.Group("/song")
 	{
-		api.GET("", h.GetSongs)
-		api.GET("/:id/text", h.GetSongText)
 		api.POST("", h.CreateSong)
-		api.PUT("/:id", h.UpdateSong)
-		api.DELETE("/:id", h.DeleteSong)
+		// api.GET("", h.GetSongsById)
+		// api.PUT("/:id", h.UpdateSongById)
+		// api.DELETE("/:id", h.DeleteSongById)
 	}
 
 	return router

@@ -1,11 +1,8 @@
--- schema/000001_init.up.sql
 CREATE TABLE IF NOT EXISTS songs (
     id SERIAL PRIMARY KEY,
-    group TEXT NOT NULL,
-    song TEXT NOT NULL,
-    release_date TEXT NOT NULL,
+    group_name VARCHAR(255) NOT NULL,
+    song_name VARCHAR(255) NOT NULL,
+    release_date VARCHAR(20) NOT NULL,
     text TEXT NOT NULL,
-    link TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    link VARCHAR(255) NOT NULL
 );
