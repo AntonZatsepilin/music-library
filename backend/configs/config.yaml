@@ -4,5 +4,5 @@ db:
   username: "postgres"
   host: "db"
   port: "5432"
-  dbname: "music-library-db"
+  dbname: "songs-store-db"
   sslmode: "disable"

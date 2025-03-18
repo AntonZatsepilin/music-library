@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/AntonZatsepilin/music-library.git/internal/handler"
+	"github.com/AntonZatsepilin/music-library.git/internal/models"
 	"github.com/AntonZatsepilin/music-library.git/internal/repository"
 	"github.com/AntonZatsepilin/music-library.git/internal/service"
 	"github.com/joho/godotenv"
