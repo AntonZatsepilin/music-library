@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/AntonZatsepilin/music-library.git/internal/models"
 	"github.com/jmoiron/sqlx"
 )
 
