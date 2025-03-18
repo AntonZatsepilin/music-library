@@ -1,1 +1,1 @@
-DROP TABLE songs;
+DROP TABLE IF EXISTS songs;

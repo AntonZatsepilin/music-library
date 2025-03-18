@@ -1,3 +1,4 @@
+-- schema/000001_init.up.sql
 CREATE TABLE IF NOT EXISTS songs (
     id SERIAL PRIMARY KEY,
     group TEXT NOT NULL,
