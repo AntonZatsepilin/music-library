@@ -6,3 +6,6 @@ db:
   port: "5432"
   dbname: "songs-store-db"
   sslmode: "disable"
+
+
+musicInfoAPI: "http://localhost:8081"

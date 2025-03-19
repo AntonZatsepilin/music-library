@@ -6,14 +6,14 @@ import (
 )
 
 func (h *Handler) CreateSong(c *gin.Context) {
-	var inputSong models.Song
+	var inputSong models.CreateSongRequest
 
 	if err := c.BindJSON(&inputSong); err != nil {
 		newErrorResponse(c, 400, err.Error())
 		return
 	}
 
-	if err := h.services.CreateSong(inputSong); err != nil {
+	if err := h.services.SongService.CreateSong(inputSong); err != nil {
 		newErrorResponse(c, 500, err.Error())
 		return
 	}

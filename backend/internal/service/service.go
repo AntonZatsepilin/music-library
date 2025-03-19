@@ -6,15 +6,15 @@ import (
 )
 
 type SongService interface {
-	CreateSong(song models.Song) error
+	CreateSong(song models.CreateSongRequest) error
 }
 
 type Service struct {
 	SongService
 }
 
-func NewService(repos *repository.Repository) *Service {
+func NewService(repos *repository.Repository, infoClient *MusicInfoClient) *Service {
 	return &Service{
-		SongService: NewSongService(repos.SongRepository),
+		SongService: NewSongService(repos.SongRepository, infoClient),
 	}
 }

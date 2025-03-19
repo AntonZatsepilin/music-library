@@ -37,12 +37,15 @@ func main() {
 		Password: os.Getenv("DB_PASSWORD"),
 	})
 
+	musicInfoAPI := viper.GetString("musicInfoAPI")
+
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
 	repos := repository.NewRepository(db)
-	services := service.NewService(repos)
+	infoClient := service.NewMusicInfoClient(musicInfoAPI)
+	services := service.NewService(repos, infoClient)
 	handlers := handler.NewHandler(services)
 
 	srv := new(models.Server)
