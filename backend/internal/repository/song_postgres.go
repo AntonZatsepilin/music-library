@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/AntonZatsepilin/music-library.git/internal/models"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
@@ -33,12 +35,19 @@ func (r *SongPostgres) CreateSong(song models.Song) error {
 func (r *SongPostgres) DeleteSongById(id int) error {
 	logrus.WithField("id", id).Debug("Deleting a song from the database")
 	query := "DELETE FROM songs WHERE id = $1"
-	_, err := r.db.Exec(query, id)
-	if err != nil {
-		logrus.WithError(err).Error("Error deleting song")
-		return err
-	}
-
-	logrus.Info("The song has been successfully deleted")
-	return nil
+    result, err := r.db.Exec(query, id)
+    if err != nil {
+        logrus.WithError(err).Error("Database error during deletion")
+        return err
+    }
+    
+    affected, _ := result.RowsAffected()
+    if affected == 0 {
+        notFoundErr := fmt.Errorf("song with id %d not found", id)
+        logrus.WithError(notFoundErr).Warn("Attempt to delete non-existing song")
+        return notFoundErr
+    }
+    
+    logrus.Info("Song successfully deleted")
+    return nil
 }
