@@ -1,7 +1,6 @@
 package service
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -9,6 +8,7 @@ import (
 	"time"
 
 	"github.com/AntonZatsepilin/music-library.git/internal/models"
+	"github.com/sirupsen/logrus"
 )
 
 type MusicInfoClient struct {
@@ -34,18 +34,29 @@ func (e *APIError) Error() string {
     return fmt.Sprintf("API request failed: status %d, body %s", e.StatusCode, e.Body)
 }
 
-func (c *MusicInfoClient) GetSongDetail(ctx context.Context, group, song string) (*models.SongDetail, error) {
+func (c *MusicInfoClient) GetSongDetail(group, song string) (*models.SongDetail, error) {
+
+    logrus.WithFields(logrus.Fields{
+        "group": group,
+        "song":  song,
+        "url":   c.baseURL,
+    }).Debug("Data request from external API")
+
     url := fmt.Sprintf("%s/info?group=%s&song=%s", c.baseURL, group, song)
-    req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+    req, err := http.NewRequest(http.MethodGet, url, nil)
     if err != nil {
         return nil, err
     }
+
+    logrus.Debug("Sending a request to the external API")
 
     resp, err := c.client.Do(req)
     if err != nil {
         return nil, err
     }
     defer resp.Body.Close()
+
+    logrus.WithField("status", resp.StatusCode).Debug("Received a response from the external API")
 
     if resp.StatusCode != http.StatusOK {
         body, _ := io.ReadAll(resp.Body)

@@ -1,22 +1,16 @@
 package service
 
 import (
-	"context"
-	"errors"
 	"fmt"
 	"math/rand"
-	"net/http"
 	"time"
 
 	"github.com/AntonZatsepilin/music-library.git/internal/models"
 	"github.com/AntonZatsepilin/music-library.git/internal/repository"
 	"github.com/bxcodec/faker/v3"
+	"github.com/sirupsen/logrus"
 )
 
-var (
-    ErrInvalidInput    = errors.New("invalid input")
-    ErrExternalService = errors.New("external service error")
-)
 
 type SongServiceImpl struct {
     repo       repository.SongRepository
@@ -32,19 +26,15 @@ func NewSongService(repo repository.SongRepository, infoClient *MusicInfoClient)
 
 
 func (s *SongServiceImpl) CreateSong(input models.CreateSongRequest) error {
-    detail, err := s.infoClient.GetSongDetail(context.Background(), input.Group, input.Song)
+    logrus.WithFields(logrus.Fields{
+        "group": input.Group,
+        "song":  input.Song,
+    }).Debug("Data request from external API")
+    detail, err := s.infoClient.GetSongDetail(input.Group, input.Song)
     if err != nil {
-        var apiErr *APIError
-        if errors.As(err, &apiErr) {
-            switch apiErr.StatusCode {
-            case http.StatusBadRequest:
-                return fmt.Errorf("%w: %s", ErrInvalidInput, apiErr.Error())
-            default:
-                return fmt.Errorf("%w: %s", ErrExternalService, apiErr.Error())
-            }
+        logrus.WithError(err).Error("API error")
+        return fmt.Errorf("API error: %w", err)
         }
-        return fmt.Errorf("failed to get song details: %w", err)
-    }
 
     song := models.Song{
         Group:       input.Group,
@@ -53,7 +43,7 @@ func (s *SongServiceImpl) CreateSong(input models.CreateSongRequest) error {
         Text:        detail.Text,
         Link:        detail.Link,
     }
-
+    logrus.Debug("Saving a song to the database")
     return s.repo.CreateSong(song)
 }
 
