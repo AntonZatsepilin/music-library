@@ -55,13 +55,18 @@ func main() {
 		}
 	}()
 
-	logrus.Print("TPR-main Started")
+	logrus.Print("music-library-app Started")
+
+	if err := services.SongService.GenerateFakeSongs(100); err != nil {
+		logrus.Fatalf("Failed to generate fake songs: %s", err.Error())
+	}
+        logrus.Printf("Successfully generated %d fake songs", 100)
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 	<-quit
 
-	logrus.Print("TPR-main Shutting Down")
+	logrus.Print("music-library-app Shutting Down")
 
 	if err := srv.Shutdown(context.Background()); err != nil {
 		logrus.Errorf("error occured on server shutting down: %s", err.Error())

@@ -7,6 +7,7 @@ import (
 
 type SongService interface {
 	CreateSong(song models.CreateSongRequest) error
+	GenerateFakeSongs(count int) error
 }
 
 type Service struct {
