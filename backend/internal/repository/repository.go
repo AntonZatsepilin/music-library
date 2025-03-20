@@ -7,6 +7,7 @@ import (
 
 type  SongRepository interface {
 	CreateSong(song models.Song) error
+	DeleteSongById(id int) error
 }
 
 type Repository struct {

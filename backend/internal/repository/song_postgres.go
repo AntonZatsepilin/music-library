@@ -29,3 +29,16 @@ func (r *SongPostgres) CreateSong(song models.Song) error {
 	logrus.Info("The song has been successfully saved")
 	return nil
 }
+
+func (r *SongPostgres) DeleteSongById(id int) error {
+	logrus.WithField("id", id).Debug("Deleting a song from the database")
+	query := "DELETE FROM songs WHERE id = $1"
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		logrus.WithError(err).Error("Error deleting song")
+		return err
+	}
+
+	logrus.Info("The song has been successfully deleted")
+	return nil
+}

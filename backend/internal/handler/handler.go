@@ -23,7 +23,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		api.POST("", h.CreateSong)
 		// api.GET("", h.GetSongsById)
 		// api.PUT("/:id", h.UpdateSongById)
-		// api.DELETE("/:id", h.DeleteSongById)
+		api.DELETE("/:id", h.DeleteSongById)
 	}
 
 	return router

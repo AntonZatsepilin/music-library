@@ -69,3 +69,7 @@ func (s *SongServiceImpl) GenerateFakeSongs(count int) error {
     }
     return nil
 }
+
+func (s *SongServiceImpl) DeleteSongById(id int) error {
+    return s.repo.DeleteSongById(id)
+}

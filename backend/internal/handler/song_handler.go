@@ -32,3 +32,22 @@ func (h *Handler) CreateSong(c *gin.Context) {
 	c.JSON(200, statusResponse{"Song created successfully"})
 
 }
+
+func (h *Handler) DeleteSongById(c *gin.Context) {
+	logrus.Debug("Received a request to delete a song")
+	
+	songId, err := getSongId(c)
+
+	if err != nil {
+		return
+	}
+
+	if err := h.services.SongService.DeleteSongById(songId); err != nil {
+		logrus.WithError(err).Error("Song deletion error")
+		newErrorResponse(c, 500, err.Error())
+		return
+	}
+
+	logrus.Info("Song deleted successfully")
+	c.JSON(200, statusResponse{"Song deleted successfully"})
+}
