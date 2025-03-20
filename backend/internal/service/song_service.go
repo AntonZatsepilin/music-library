@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/AntonZatsepilin/music-library.git/internal/models"
@@ -80,4 +81,38 @@ func (s *SongServiceImpl) UpdateSongById(id int, input models.UpdateSongRequest)
 
 func (s *SongServiceImpl) GetSongById(id int) (models.Song, error) {
     return s.repo.GetSongById(id)
+}
+
+func (s *SongServiceImpl) GetSongLyrics(songId int, page, limit int) ([]string, int, error) {
+
+    song, err := s.repo.GetSongById(songId)
+    if err != nil {
+        logrus.WithFields(logrus.Fields{
+            "songId": songId,
+            "error":  err,
+        }).Error("Failed to get song for lyrics")
+        return nil, 0, fmt.Errorf("song not found: %w", err)
+    }
+
+    verses := strings.Split(song.Text, "\n\n")
+    totalVerses := len(verses)
+
+    start := (page - 1) * limit
+    if start >= totalVerses {
+        return []string{}, totalVerses, nil
+    }
+
+    end := start + limit
+    if end > totalVerses {
+        end = totalVerses
+    }
+
+    logrus.WithFields(logrus.Fields{
+        "songId":      songId,
+        "totalVerses": totalVerses,
+        "page":        page,
+        "limit":       limit,
+    }).Debug("Successfully processed lyrics request")
+
+    return verses[start:end], totalVerses, nil
 }

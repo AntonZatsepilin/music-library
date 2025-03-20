@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/AntonZatsepilin/music-library.git/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -103,4 +106,43 @@ func (h *Handler) GetSongById(c *gin.Context) {
 
 	logrus.Info("Song retrieved successfully")
 	c.JSON(200, song)
+}
+
+func (h *Handler) GetSongLyrics(c *gin.Context) {
+	logrus.Debug("Received a request to get a song lyrics")
+
+	songId, err := getSongId(c)
+
+	if err != nil {
+		return
+	}
+
+	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+    if err != nil || page < 1 {
+        newErrorResponse(c, http.StatusBadRequest, "invalid page number")
+        return
+    }
+
+    limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
+    if err != nil || limit < 1 {
+        newErrorResponse(c, http.StatusBadRequest, "invalid limit value")
+        return
+    }
+
+	verses, total, err := h.services.SongService.GetSongLyrics(songId, page, limit)
+    if err != nil {
+        logrus.WithError(err).Error("Lyrics retrieval error")
+        newErrorResponse(c, http.StatusInternalServerError, err.Error())
+        return
+    }
+
+	response := models.LyricResponse{
+        Verses: verses,
+        Total:  total,
+        Page:   page,
+        Limit:  limit,
+    }
+
+    logrus.Info("Lyrics retrieved successfully")
+    c.JSON(http.StatusOK, response)
 }

@@ -27,3 +27,15 @@ type UpdateSongRequest struct {
     Text        string `json:"text" db:"text"`
     Link        string `json:"link" db:"link"`
 }
+
+type LyricsRequest struct {
+    Page  int `json:"page"`
+    Limit int `json:"limit"`
+}
+
+type LyricResponse struct {
+    Verses []string `json:"verses"`
+    Total  int      `json:"total"`
+    Page   int      `json:"page"`
+    Limit  int      `json:"limit"`
+}

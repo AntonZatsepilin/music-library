@@ -11,6 +11,8 @@ type SongService interface {
 	DeleteSongById(id int) error
 	UpdateSongById(id int, input models.UpdateSongRequest) error
 	GetSongById(id int) (models.Song, error)
+	GetSongLyrics(songId int, page, limit int) ([]string, int, error)
+
 }
 
 type Service struct {
