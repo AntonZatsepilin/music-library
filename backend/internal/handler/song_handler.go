@@ -51,3 +51,35 @@ func (h *Handler) DeleteSongById(c *gin.Context) {
 	logrus.Info("Song deleted successfully")
 	c.JSON(200, statusResponse{"Song deleted successfully"})
 }
+
+func (h *Handler) UpdateSongById(c *gin.Context) {
+	logrus.Debug("Received a request to update a song")
+
+	songId, err := getSongId(c)
+
+	if err != nil {
+		return
+	}
+
+	var inputSong models.UpdateSongRequest
+
+	if err := c.BindJSON(&inputSong); err != nil {
+		logrus.WithError(err).Warn("Invalid request format")
+		newErrorResponse(c, 400, err.Error())
+		return
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"group": inputSong.Group,
+		"song":  inputSong.Song,
+	}).Info("An attempt at a song update")
+
+	if err := h.services.SongService.UpdateSongById(songId, inputSong); err != nil {
+		logrus.WithError(err).Error("Song update error")
+		newErrorResponse(c, 500, err.Error())
+		return
+	}
+
+	logrus.Info("Song updated successfully")
+	c.JSON(200, statusResponse{"Song updated successfully"})
+}

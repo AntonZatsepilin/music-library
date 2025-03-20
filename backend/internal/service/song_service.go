@@ -73,3 +73,7 @@ func (s *SongServiceImpl) GenerateFakeSongs(count int) error {
 func (s *SongServiceImpl) DeleteSongById(id int) error {
     return s.repo.DeleteSongById(id)
 }
+
+func (s *SongServiceImpl) UpdateSongById(id int, input models.UpdateSongRequest) error {
+    return s.repo.UpdateSongById(id, input)
+}

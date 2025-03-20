@@ -51,3 +51,16 @@ func (r *SongPostgres) DeleteSongById(id int) error {
     logrus.Info("Song successfully deleted")
     return nil
 }
+
+func (r *SongPostgres) UpdateSongById(id int, input models.UpdateSongRequest) error {
+	logrus.WithField("id", id).Debug("Updating a song in the database")
+	query := "UPDATE songs SET group_name=$1, song_name=$2, release_date=$3, text=$4, link=$5 WHERE id=$6"
+	_, err := r.db.Exec(query, input.Group, input.Song, input.ReleaseDate, input.Text, input.Link, id)
+	if err != nil {
+		logrus.WithError(err).Error("Error updating song")
+		return err
+	}
+
+	logrus.Info("Song updated successfully")
+	return nil
+}
