@@ -83,3 +83,24 @@ func (h *Handler) UpdateSongById(c *gin.Context) {
 	logrus.Info("Song updated successfully")
 	c.JSON(200, statusResponse{"Song updated successfully"})
 }
+
+func (h *Handler) GetSongById(c *gin.Context) {
+	logrus.Debug("Received a request to get a song")
+
+	songId, err := getSongId(c)
+
+	if err != nil {
+		return
+	}
+
+	song, err := h.services.SongService.GetSongById(songId)
+
+	if err != nil {
+		logrus.WithError(err).Error("Song retrieval error")
+		newErrorResponse(c, 500, err.Error())
+		return
+	}
+
+	logrus.Info("Song retrieved successfully")
+	c.JSON(200, song)
+}

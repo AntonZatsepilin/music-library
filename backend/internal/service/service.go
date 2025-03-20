@@ -10,6 +10,7 @@ type SongService interface {
 	GenerateFakeSongs(count int) error
 	DeleteSongById(id int) error
 	UpdateSongById(id int, input models.UpdateSongRequest) error
+	GetSongById(id int) (models.Song, error)
 }
 
 type Service struct {

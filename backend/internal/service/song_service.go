@@ -77,3 +77,7 @@ func (s *SongServiceImpl) DeleteSongById(id int) error {
 func (s *SongServiceImpl) UpdateSongById(id int, input models.UpdateSongRequest) error {
     return s.repo.UpdateSongById(id, input)
 }
+
+func (s *SongServiceImpl) GetSongById(id int) (models.Song, error) {
+    return s.repo.GetSongById(id)
+}
