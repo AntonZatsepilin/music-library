@@ -24,5 +24,6 @@ docker-compose up --build
 ```
 
 ### Step 3
-In order to check the database operation go to http://localhost:5050  
+music-library-app is on http://localhost:8080
+PG Admin is on http://localhost:5050  
 Swagger UI is on http://localhost:8080/swagger/index.html
