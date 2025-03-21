@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "github.com/AntonZatsepilin/music-library.git/docs"
 	"github.com/AntonZatsepilin/music-library.git/internal/handler"
 	"github.com/AntonZatsepilin/music-library.git/internal/models"
 	"github.com/AntonZatsepilin/music-library.git/internal/repository"
@@ -16,7 +17,11 @@ import (
 	"github.com/spf13/viper"
 )
 
-
+// @title           Music Library API
+// @version         1.0.0
+// @description     API for managing music library
+// @host            localhost:8080
+// @BasePath        /
 func main() {
 	logrus.SetFormatter(new(logrus.TextFormatter))
 

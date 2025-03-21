@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   handler.errorResponse:
     properties:
@@ -79,10 +80,12 @@ definitions:
       text:
         type: string
     type: object
+host: localhost:8080
 info:
+  contact: {}
+  description: API for managing music library
   title: Music Library API
   version: 1.0.0
-  contact: {}
 paths:
   /songs:
     get:

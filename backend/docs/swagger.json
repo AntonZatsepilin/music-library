@@ -1,10 +1,13 @@
 {
     "swagger": "2.0",
     "info": {
+        "description": "API for managing music library",
         "title": "Music Library API",
-        "version": "1.0.0",
-        "contact": {}
+        "contact": {},
+        "version": "1.0.0"
     },
+    "host": "localhost:8080",
+    "basePath": "/",
     "paths": {
         "/songs": {
             "get": {
