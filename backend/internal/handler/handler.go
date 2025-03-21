@@ -26,6 +26,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		api.PUT("/:id", h.UpdateSongById)
 		api.DELETE("/:id", h.DeleteSongById)
 		api.GET("/:id/lyrics", h.GetSongLyrics)
+		api.GET("/generate", h.GenerateFakeSongs)
 	}
 
 	return router

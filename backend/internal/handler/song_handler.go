@@ -205,3 +205,22 @@ func (h *Handler) GetSongs(c *gin.Context) {
 
     c.JSON(http.StatusOK, response)
 }
+
+func (h *Handler) GenerateFakeSongs(c *gin.Context) {
+	logrus.Debug("Received a request to generate fake songs")
+
+	count, err := strconv.Atoi(c.DefaultQuery("count", "1"))
+	if err != nil || count < 1 {
+		newErrorResponse(c, http.StatusBadRequest, "invalid count value")
+		return
+	}
+
+	if err := h.services.SongService.GenerateFakeSongs(count); err != nil {
+		logrus.WithError(err).Error("Failed to generate fake songs")
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	logrus.Info("Fake songs generated successfully")
+	c.JSON(http.StatusOK, statusResponse{"Fake songs generated successfully"})
+}

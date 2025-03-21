@@ -57,11 +57,6 @@ func main() {
 
 	logrus.Print("music-library-app Started")
 
-	if err := services.SongService.GenerateFakeSongs(100); err != nil {
-		logrus.Fatalf("Failed to generate fake songs: %s", err.Error())
-	}
-        logrus.Printf("Successfully generated %d fake songs", 100)
-
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 	<-quit
