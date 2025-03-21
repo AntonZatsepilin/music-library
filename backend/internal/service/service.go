@@ -12,6 +12,7 @@ type SongService interface {
 	UpdateSongById(id int, input models.UpdateSongRequest) error
 	GetSongById(id int) (models.Song, error)
 	GetSongLyrics(songId int, page, limit int) ([]string, int, error)
+	GetSongs(filter models.SongFilter, page, limit int) ([]models.Song, int, error)
 
 }
 

@@ -116,3 +116,14 @@ func (s *SongServiceImpl) GetSongLyrics(songId int, page, limit int) ([]string, 
 
     return verses[start:end], totalVerses, nil
 }
+
+func (s *SongServiceImpl) GetSongs(filter models.SongFilter, page, limit int) ([]models.Song, int, error) {
+    if page < 1 {
+        page = 1
+    }
+    if limit < 1 || limit > 100 {
+        limit = 10
+    }
+    
+    return s.repo.GetSongs(filter, page, limit)
+}

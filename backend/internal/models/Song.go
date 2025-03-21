@@ -39,3 +39,18 @@ type LyricResponse struct {
     Page   int      `json:"page"`
     Limit  int      `json:"limit"`
 }
+
+type SongFilter struct {
+    Group       *string `form:"group"`
+    Song        *string `form:"song"`
+    ReleaseDate *string `form:"releaseDate"`
+    Text        *string `form:"text"`
+    Link        *string `form:"link"`
+}
+
+type SongsResponse struct {
+    Data  []Song `json:"data"`
+    Total int    `json:"total"`
+    Page  int    `json:"page"`
+    Limit int    `json:"limit"`
+}

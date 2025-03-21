@@ -146,3 +146,38 @@ func (h *Handler) GetSongLyrics(c *gin.Context) {
     logrus.Info("Lyrics retrieved successfully")
     c.JSON(http.StatusOK, response)
 }
+
+func (h *Handler) GetSongs(c *gin.Context) {
+    var filter models.SongFilter
+    if err := c.ShouldBindQuery(&filter); err != nil {
+        newErrorResponse(c, http.StatusBadRequest, "invalid filter parameters")
+        return
+    }
+
+    page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+    if err != nil || page < 1 {
+        newErrorResponse(c, http.StatusBadRequest, "invalid page number")
+        return
+    }
+
+    limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
+    if err != nil || limit < 1 {
+        newErrorResponse(c, http.StatusBadRequest, "invalid limit value")
+        return
+    }
+
+    songs, total, err := h.services.SongService.GetSongs(filter, page, limit)
+    if err != nil {
+        newErrorResponse(c, http.StatusInternalServerError, "failed to get songs")
+        return
+    }
+
+    response := models.SongsResponse{
+        Data:  songs,
+        Total: total,
+        Page:  page,
+        Limit: limit,
+    }
+
+    c.JSON(http.StatusOK, response)
+}

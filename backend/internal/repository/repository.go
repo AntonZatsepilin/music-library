@@ -10,6 +10,7 @@ type  SongRepository interface {
 	DeleteSongById(id int) error
 	UpdateSongById(id int, input models.UpdateSongRequest) error
 	GetSongById(id int) (models.Song, error)
+	GetSongs(filter models.SongFilter, page, limit int) ([]models.Song, int, error)
 }
 
 type Repository struct {

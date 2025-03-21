@@ -178,3 +178,53 @@ func (r *SongPostgres) GetSongById(id int) (models.Song, error) {
     return song, nil
 }
 
+func (r *SongPostgres) GetSongs(filter models.SongFilter, page, limit int) ([]models.Song, int, error) {
+    query := "SELECT * FROM songs WHERE 1=1"
+    args := map[string]interface{}{}
+    
+    if filter.Group != nil {
+        query += " AND group_name = :group"
+        args["group"] = *filter.Group
+    }
+    if filter.Song != nil {
+        query += " AND song_name = :song"
+        args["song"] = *filter.Song
+    }
+    if filter.ReleaseDate != nil {
+        query += " AND release_date = :release_date"
+        args["release_date"] = *filter.ReleaseDate
+    }
+    if filter.Text != nil {
+        query += " AND text ILIKE '%' || :text || '%'"
+        args["text"] = *filter.Text
+    }
+    if filter.Link != nil {
+        query += " AND link = :link"
+        args["link"] = *filter.Link
+    }
+
+    countQuery := "SELECT COUNT(*) FROM (" + query + ") AS subquery"
+    namedCountQuery, _, _ := sqlx.Named(countQuery, args)
+    countQuery = r.db.Rebind(namedCountQuery)
+    
+    var total int
+    err := r.db.Get(&total, countQuery)
+    if err != nil {
+        return nil, 0, err
+    }
+
+    query += " ORDER BY id LIMIT :limit OFFSET :offset"
+    args["limit"] = limit
+    args["offset"] = (page - 1) * limit
+
+    namedQuery, _, _ := sqlx.Named(query, args)
+    executableQuery := r.db.Rebind(namedQuery)
+    
+    var songs []models.Song
+    err = r.db.Select(&songs, executableQuery)
+    if err != nil {
+        return nil, 0, err
+    }
+
+    return songs, total, nil
+}
