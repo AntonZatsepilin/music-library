@@ -41,11 +41,13 @@ type LyricResponse struct {
 }
 
 type SongFilter struct {
-    Group       *string `form:"group"`
-    Song        *string `form:"song"`
-    ReleaseDate *string `form:"releaseDate"`
-    Text        *string `form:"text"`
-    Link        *string `form:"link"`
+    Group       string `form:"group"`
+    Song        string `form:"song"`
+    ReleaseDate string `form:"releaseDate"`
+    Text        string `form:"text"`
+    Link        string `form:"link"`
+    SortBy      string `form:"sort_by"`
+    SortOrder   string `form:"sort_order"`
 }
 
 type SongsResponse struct {

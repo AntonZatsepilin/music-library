@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/AntonZatsepilin/music-library.git/internal/models"
 	"github.com/gin-gonic/gin"
@@ -154,15 +155,38 @@ func (h *Handler) GetSongs(c *gin.Context) {
         return
     }
 
-    page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
+    if filter.SortBy != "" {
+        allowedFields := map[string]bool{
+            "group":       true,
+            "song":       true,
+            "releaseDate": true,
+            "text":       true,
+            "link":       true,
+            "":           true,
+        }
+        if !allowedFields[filter.SortBy] {
+            newErrorResponse(c, http.StatusBadRequest, "invalid sort_by parameter")
+            return
+        }
+    }
+
+    if filter.SortOrder != "" {
+        order := strings.ToUpper(filter.SortOrder)
+        if order != "ASC" && order != "DESC" && order != "" {
+            newErrorResponse(c, http.StatusBadRequest, "sort_order must be ASC or DESC")
+            return
+        }
+    }
+
+    page, err := strconv.Atoi(c.DefaultQuery("page", "1"))	
     if err != nil || page < 1 {
         newErrorResponse(c, http.StatusBadRequest, "invalid page number")
         return
     }
 
     limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
-    if err != nil || limit < 1 {
-        newErrorResponse(c, http.StatusBadRequest, "invalid limit value")
+    if err != nil || limit < 1 || limit > 100 {
+        newErrorResponse(c, http.StatusBadRequest, "limit must be between 1 and 100")
         return
     }
 

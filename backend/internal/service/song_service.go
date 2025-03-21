@@ -121,8 +121,10 @@ func (s *SongServiceImpl) GetSongs(filter models.SongFilter, page, limit int) ([
     if page < 1 {
         page = 1
     }
-    if limit < 1 || limit > 100 {
+    if limit < 1 {
         limit = 10
+    } else if limit > 100 {
+        limit = 100
     }
     
     return s.repo.GetSongs(filter, page, limit)
