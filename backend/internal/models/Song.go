@@ -1,5 +1,7 @@
 package models
 
+// Song model
+// swagger:model Song
 type Song struct {
     ID          int    `db:"id" json:"id"`
     Group       string `db:"group_name" json:"group" binding:"required"`
@@ -33,6 +35,8 @@ type LyricsRequest struct {
     Limit int `json:"limit"`
 }
 
+// Lyric response
+// swagger:response lyricResponse
 type LyricResponse struct {
     Verses []string `json:"verses"`
     Total  int      `json:"total"`
@@ -50,6 +54,8 @@ type SongFilter struct {
     SortOrder   string `form:"sort_order"`
 }
 
+// Songs response
+// swagger:response songsResponse
 type SongsResponse struct {
     Data  []Song `json:"data"`
     Total int    `json:"total"`
