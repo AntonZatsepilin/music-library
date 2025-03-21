@@ -1,7 +1,5 @@
 # music-library-app
 
-Music-library
-
 ## Description
 
 This project is a REST API for music storage. It is written in Go and uses PostgreSQL and Docker. The project includes creation, reading with pagination, updating, and deletion of music.
@@ -26,5 +24,5 @@ docker-compose up --build
 ```
 
 ### Step 3
-In order to check the database operation go to http://localhost:5050
+In order to check the database operation go to http://localhost:5050  
 Swagger UI is on http://localhost:8080/swagger/index.html
