@@ -16,7 +16,7 @@ RUN apk add --no-cache curl \
     && mv migrate /usr/local/bin \
     && go install github.com/swaggo/swag/cmd/swag@latest
 
-RUN swag init -g cmd/server/main.go -o ./cmd/docs
+RUN swag init -g cmd/server/main.go -o ./docs
 
 RUN go build -o main ./cmd/server
 
