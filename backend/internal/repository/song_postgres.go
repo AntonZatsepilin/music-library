@@ -144,7 +144,7 @@ func (r *SongPostgres) UpdateSongById(id int, input models.UpdateSongRequest) er
 
 func (r *SongPostgres) GetSongById(id int) (models.Song, error) {
     var song models.Song
-    err := r.db.Get(&song, "SELECT * FROM songs WHERE id = $1", id)
+    err := r.db.Get(&song, "SELECT songs.id, songs.group_name, songs.song_name, songs.release_date, songs.text, songs.link FROM songs WHERE id = $1", id)
     if err != nil {
         if errors.Is(err, sql.ErrNoRows) {
             return song, fmt.Errorf("song with id %d not found", id)
